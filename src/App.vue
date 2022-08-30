@@ -17,6 +17,14 @@ export default {
 
 <style>
 #app {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+}
+*{
+  padding:0;
+  margin:0;
+  box-sizing:border-box;
 }
 </style>
