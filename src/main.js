@@ -30,10 +30,12 @@ const store = new Vuex.Store({
     },
   },
   actions:{
-    updateInfoUser({commit},exp){
+    updateInfoUser({commit},info){
+      commit('setExp',info);
+    },
+    updateExperience({commit},exp){
       commit('setExp',exp);
-      
-    }
+    },
   }
 })
 
