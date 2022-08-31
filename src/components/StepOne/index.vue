@@ -38,8 +38,8 @@
           <select v-model="infoUser.contry" class="input-line" name="" id="">
             <!-- <option disabled > dd</option> -->
             <option value="hanoi">Thành Phố Hà Nội</option>
-            <option value="">Thành phố Hồ Chí Minh</option>
-            <option value="">Bắc Ninh</option>
+            <option value="Thành phố Hồ Chí Minh">Thành phố Hồ Chí Minh</option>
+            <option value="Bắc Ninh">Bắc Ninh</option>
           </select>
         </div>
         <div class="line-info">
@@ -88,6 +88,13 @@
         </div>
       </div>
     </DefaultLayout>
+    <ButtonBase
+      :className="'next-btn'"
+      :nameButton="'Tiếp tục'"
+      :type="'submit'"
+      @onHandle="onSubmitInfo"
+    />
+    <!-- <h1>{{ infomationUser }}</h1> -->
   </form>
 </template>
 
@@ -95,6 +102,8 @@
 import DefaultLayout from "../DefaultLayout/index.vue";
 import { onMounted, onUnmounted } from "vue";
 import useStorage from "@/utils/useStorage";
+import ButtonBase from "../ButtonBase/index.vue";
+import { mapGetters, mapMutations } from "vuex";
 // eslint-disable-next-line
 const { uploadFile } = useStorage("files");
 // improt DefaultLayout from '';
@@ -102,6 +111,7 @@ export default {
   name: "StepOne",
   components: {
     DefaultLayout,
+    ButtonBase,
   },
   data() {
     return {
@@ -118,7 +128,14 @@ export default {
       },
     };
   },
+
+  computed: {
+    // this.$store.state.infomationUser => this.infomationUser
+    ...mapGetters(["infomationUser"]),
+  },
+
   methods: {
+    ...mapMutations(["setInfoUser"]),
     condition(selected) {
       const typesFile = ["image/png", "image/jpg"];
       const ERRORS = {
@@ -156,19 +173,15 @@ export default {
       this.condition(item);
       console.log(item);
     },
-
-    // onSubmitInfo() {
-    //   // e.preventDefault();
-    //   console.log(
-    //     this.infoUser.fullName,
-    //     this.infoUser.birthday,
-    //     "all data here"
-    //   );
-    //   if (this.infoUser.fullName && this.infoUser.birthday) {
-    //     this.$emit("handleNextStep", this.infoUser);
-    //   }
-    // },
+    onSubmitInfo() {
+      // console.log(this.$store.state.name, "submit here");
+      this.setInfoUser(this.infoUser);
+      if (this.infoUser.fullName && this.infoUser.birthday) {
+        this.$emit("handleNextStep", this.infoUser);
+      }
+    },
   },
+
   setup() {
     const events = ["dragenter", "dragleave", "dragover", "drop"];
     onMounted(() => {
@@ -230,6 +243,10 @@ export default {
   background: #627d98;
   border-radius: 3px;
   margin-right: 4px;
+}
+.button-box {
+  display: flex;
+  column-gap: 15px;
 }
 .next-btn {
   padding: 8px 12px;

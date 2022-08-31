@@ -30,17 +30,12 @@
         <p>Xác nhận thông tin</p>
       </div>
     </div>
-    <component :is="currentStep" />
-    <!-- <button type="submit" v-if="step <= 2" class="next-btn" @click="onNextStep">
-      Tiếp tục
-    </button>
-    <button v-if="step >= 2" class="next-btn" @click="onprevStep">
-      Quay Lại
-    </button>
-    <button type="submit" v-if="step === 3" class="next-btn" @click="onSubmit">
-      Hoàn thành
-    </button> -->
-    <div class="button-box">
+    <component
+      :is="currentStep"
+      @handleNextStep="onNextStep"
+      @handlePrevStep="onPrevStep"
+    />
+    <!-- <div class="button-box">
       <button
         v-if="currentStep !== 'StepThree'"
         class="next-btn"
@@ -58,7 +53,7 @@
       >
         Quay lại
       </button>
-    </div>
+    </div> -->
   </div>
 </template>
 

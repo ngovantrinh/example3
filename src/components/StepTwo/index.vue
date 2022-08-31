@@ -1,49 +1,133 @@
 <template>
-  <form>
-    <DefaultLayout>
-      <div class="form-information">
-        <div class="line-info">
-          <label for="company">
-            <p>Họ và tên</p>
-            <input class="input-line" id="company" type="text" />
-          </label>
+  <form onsubmit="return false">
+    <div v-for="form in allFormExp" :key="form.id">
+      {{ form.id }}
+      {{ form.nameCompany }}
+      {{ form.position }}
+      {{ form.interval }}
+      {{ form.describeWork }}
+      <DefaultLayout>
+        <div class="form-information">
+          <div class="line-info">
+            <label for="company">
+              <p>Tên công ty</p>
+              <input
+                v-model="form.nameCompany"
+                class="input-line"
+                id="company"
+                type="text"
+              />
+            </label>
+          </div>
+          <div class="line-info">
+            <label for="company">
+              <p>Vị trí từng làm</p>
+              <input
+                v-model="form.position"
+                class="input-line"
+                id="company"
+                type="text"
+              />
+            </label>
+          </div>
+          <div class="line-info">
+            <label for="position">
+              <p>Thời gian làm việc</p>
+              <input
+                v-model="form.interval"
+                class="input-line"
+                type="date"
+                id="position"
+              />
+            </label>
+          </div>
+          <div class="line-info">
+            <label for="description">
+              <p>Mô tả về công việc</p>
+              <textarea
+                v-model="form.describeWork"
+                class="input-line"
+                id="description"
+                cols="30"
+                rows="5"
+              ></textarea>
+            </label>
+          </div>
         </div>
-        <div class="line-info">
-          <label for="position">
-            <p>Vị trí từng làm</p>
-            <input class="input-line" type="date" id="position" />
-          </label>
-        </div>
-        <div class="line-info">
-          <p>Thành phố</p>
-          <select class="input-line" name="" id="">
-            <!-- <option disabled > dd</option> -->
-            <option value="hanoi">Thành Phố Hà Nội</option>
-            <option value="">Thành phố Hồ Chí Minh</option>
-            <option value="">Bắc Ninh</option>
-          </select>
-        </div>
-        <div class="line-info">
-          <label for="description">
-            <p>Mô tả về công việc</p>
-            <textarea
-              class="input-line"
-              id="description"
-              cols="30"
-              rows="5"
-            ></textarea>
-          </label>
-        </div>
-      </div>
-    </DefaultLayout>
+      </DefaultLayout>
+    </div>
+    <div class="button-box">
+      <ButtonBase
+        :className="'next-btn'"
+        :nameButton="'Tiếp tục'"
+        :type="'submit'"
+        @onHandle="onSubmitInfo"
+      />
+      <ButtonBase
+        :className="'next-btn'"
+        :nameButton="'Quay lại'"
+        :type="'submit'"
+        @onHandle="onPrevInfo"
+      />
+      <ButtonBase
+        :className="'next-btn'"
+        :nameButton="'thêm form'"
+        :type="'button'"
+        @onHandle="onAddNewForm"
+      />
+    </div>
   </form>
 </template>
 
 <script>
 import DefaultLayout from "../DefaultLayout/index.vue";
+import ButtonBase from "../ButtonBase/index.vue";
+import { mapActions, mapGetters, mapMutations } from "vuex";
 export default {
   name: "StepTwo",
-  components: { DefaultLayout },
+  data() {
+    return {
+      exp: {
+        id: 1,
+        nameCompany: "",
+        position: "",
+        interval: "",
+        describeWork: "",
+      },
+      allFormExp: [],
+    };
+  },
+  components: { DefaultLayout, ButtonBase },
+  created() {
+    this.allFormExp.push(this.exp);
+    console.log(this.allFormExp);
+  },
+  computed: {
+    ...mapGetters(["experience"]),
+  },
+  methods: {
+    ...mapMutations(["setExp"]),
+    ...mapActions(["updateInfoUser"]),
+    onPrevInfo(e) {
+      e.preventDefault();
+      this.$emit("handlePrevStep");
+    },
+    onSubmitInfo() {
+      this.updateInfoUser(this.allFormExp);
+      // console.log(e, "submit here");
+      console.log(this.allFormExp);
+      console.log(this.experience);
+      // if (this.infoUser.fullName && this.infoUser.birthday) {
+      this.$emit("handleNextStep");
+      // }
+    },
+    onAddNewForm() {
+      this.allFormExp = [
+        ...this.allFormExp,
+        { ...this.exp, id: (Math.random() * 100).toFixed(3) },
+      ];
+    },
+  },
 };
 </script>
 
