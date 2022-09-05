@@ -1,43 +1,10 @@
 import Vue from 'vue'
 import App from './App.vue'
-import Vuex from 'vuex'
-
+// import Vuex from 'vuex'
+import {store} from './Store'
 // Create a new store instance.
-Vue.use(Vuex)
+// Vue.use(Vuex)
 
-const store = new Vuex.Store({
-  state () {
-    return {
-      infomationUser: null,
-      experience: [],
-      confirm: null,
-    }
-  },
-  getters: {
-    infomationUser: state => state.infomationUser,
-    experience: state => state.experience,
-    confirm: state => state.confirm,
-  },
-  mutations: {
-    setInfoUser (state, payload) {
-      state.infomationUser = payload
-    },
-    setExp (state, payload) {
-      state.experience = [...payload]
-    },
-    setConfirm (state, payload) {
-      state.confirm = payload
-    },
-  },
-  actions:{
-    updateInfoUser({commit},info){
-      commit('setExp',info);
-    },
-    updateExperience({commit},exp){
-      commit('setExp',exp);
-    },
-  }
-})
 
 Vue.config.productionTip = false
 

@@ -5,19 +5,33 @@
         <div class="form-information">
           <div class="line-info">
             <label for="description">
-              <p>Lý do muốn vào công ty</p>
+              <div class="title">
+                <span class="required">Must</span>
+                <span>Lý do muốn vào công ty</span>
+              </div>
               <textarea
                 class="input-line"
                 id="description"
                 cols="30"
                 rows="5"
+                v-model="experience.reasone"
+                required
               ></textarea>
             </label>
           </div>
           <div class="line-info">
             <label for="company">
-              <p>Mức Lương</p>
-              <input class="input-line" id="company" type="text" />
+              <div class="title">
+                <span class="required">Must</span>
+                <span>Mức lương mong muốn</span>
+              </div>
+              <input
+                v-model="experience.wage"
+                class="input-line"
+                id="company"
+                type="text"
+                required
+              />
             </label>
           </div>
         </div>
@@ -43,6 +57,7 @@
 <script>
 import DefaultLayout from "../DefaultLayout/index.vue";
 import ButtonBase from "../ButtonBase/index.vue";
+import { mapActions } from "vuex";
 
 // export const BUTTON_NAME = "Quay lại";
 
@@ -51,8 +66,8 @@ export default {
   data() {
     return {
       experience: {
-        reason: null,
-        wage: null,
+        reason: "",
+        wage: "",
       },
     };
   },
@@ -65,6 +80,7 @@ export default {
       e.preventDefault();
       this.$emit("handlePrevStep", this.infoUser);
     },
+    ...mapActions(["updateConfirm"]),
   },
 };
 </script>

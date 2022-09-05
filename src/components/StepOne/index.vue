@@ -13,6 +13,7 @@
               class="input-line"
               id="company"
               type="text"
+              maxlength="100"
               required
             />
           </label>
@@ -92,6 +93,7 @@
       :className="'next-btn'"
       :nameButton="'Tiếp tục'"
       :type="'submit'"
+      :buttonStatus="status"
       @onHandle="onSubmitInfo"
     />
     <!-- <h1>{{ infomationUser }}</h1> -->
@@ -115,6 +117,7 @@ export default {
   },
   data() {
     return {
+      status: true,
       listFiles: [],
       numberOfFiles: 0,
       warningStatus: false,
@@ -162,22 +165,23 @@ export default {
       }
     },
     handleChangeFile(e) {
-      console.log(e.target.value, e.target.files[0]);
       const selected = e.target.files[0];
-      console.log(selected);
       this.condition(selected);
       // uploadFile(selected);
     },
     handleDrop(e) {
       const item = e?.dataTransfer.files[0];
       this.condition(item);
-      console.log(item);
     },
     onSubmitInfo() {
-      // console.log(this.$store.state.name, "submit here");
       this.setInfoUser(this.infoUser);
       if (this.infoUser.fullName && this.infoUser.birthday) {
         this.$emit("handleNextStep", this.infoUser);
+      }
+    },
+    changeStatusBtn() {
+      if (this.infoUser.fullName !== null && this.infoUser.birthday !== null) {
+        this.status = false;
       }
     },
   },
@@ -194,7 +198,14 @@ export default {
         document.body.removeEventListener(event, (e) => e.preventDefault())
       );
     });
-    // this.$emit("handleNextStep", this.infoUser);
+  },
+  watch: {
+    "infoUser.fullName": function () {
+      this.changeStatusBtn();
+    },
+    "infoUser.birthday": function () {
+      this.changeStatusBtn();
+    },
   },
 };
 </script>
@@ -214,6 +225,7 @@ export default {
   font-size: 14px;
   line-height: 20px;
   max-width: 100%;
+  width: 100%;
 }
 .form-information .line-info {
   padding: 10px 0;

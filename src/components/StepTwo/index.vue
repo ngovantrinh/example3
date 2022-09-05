@@ -1,43 +1,65 @@
 <template>
   <form onsubmit="return false">
-    <div v-for="form in allFormExp" :key="form.id">
-      {{ form.id }}
-      {{ form.nameCompany }}
-      {{ form.position }}
-      {{ form.interval }}
-      {{ form.describeWork }}
+    <div class="form-company" v-for="form in allFormExp" :key="form.id">
       <DefaultLayout>
         <div class="form-information">
-          <div class="line-info">
+          <div class="line-info company">
             <label for="company">
-              <p>Tên công ty</p>
-              <input
+              <!-- <input
                 v-model="form.nameCompany"
                 class="input-line"
                 id="company"
                 type="text"
+                placeholder="Tên công ty"
+              /> -->
+              <select
+                v-model="form.nameCompany"
+                class="input-line"
+                name=""
+                id=""
+              >
+                <!-- <option disabled > dd</option> -->
+                <option value="Mor software">Mor software</option>
+                <option value="MH Solutions">MH Solutions</option>
+                <option value="Tech">Tech</option>
+              </select>
+              <img
+                class="icon-remove"
+                :src="image"
+                alt=""
+                srcset=""
+                @click="onRemoveForm(form.id)"
               />
             </label>
           </div>
           <div class="line-info">
             <label for="company">
-              <p>Vị trí từng làm</p>
+              <div class="title">
+                <span class="required">Must</span>
+                <span>Vị trí từng làm</span>
+              </div>
+              <!-- <p>Vị trí từng làm</p> -->
               <input
                 v-model="form.position"
                 class="input-line"
                 id="company"
                 type="text"
+                required
               />
             </label>
           </div>
           <div class="line-info">
             <label for="position">
-              <p>Thời gian làm việc</p>
+              <div class="title">
+                <span class="required">Must</span>
+                <span>Thời gian làm việc</span>
+              </div>
               <input
                 v-model="form.interval"
                 class="input-line"
                 type="date"
                 id="position"
+                required
               />
             </label>
           </div>
@@ -56,6 +78,12 @@
         </div>
       </DefaultLayout>
     </div>
+    <ButtonBase
+      :className="'next-btn add-form'"
+      :nameButton="'Thêm công ty'"
+      :type="'button'"
+      @onHandle="onAddNewForm"
+    />
     <div class="button-box">
       <ButtonBase
         :className="'next-btn'"
@@ -69,12 +97,6 @@
         :type="'submit'"
         @onHandle="onPrevInfo"
       />
-      <ButtonBase
-        :className="'next-btn'"
-        :nameButton="'thêm form'"
-        :type="'button'"
-        @onHandle="onAddNewForm"
-      />
     </div>
   </form>
 </template>
@@ -83,6 +105,7 @@
 import DefaultLayout from "../DefaultLayout/index.vue";
 import ButtonBase from "../ButtonBase/index.vue";
 import { mapActions, mapGetters, mapMutations } from "vuex";
+import RemoveIcon from "../../assets/images/Trash.png";
 export default {
   name: "StepTwo",
   data() {
@@ -95,12 +118,12 @@ export default {
         describeWork: "",
       },
       allFormExp: [],
+      image: RemoveIcon,
     };
   },
   components: { DefaultLayout, ButtonBase },
   created() {
     this.allFormExp.push(this.exp);
-    console.log(this.allFormExp);
   },
   computed: {
     ...mapGetters(["experience"]),
@@ -114,12 +137,7 @@ export default {
     },
     onSubmitInfo() {
       this.updateInfoUser(this.allFormExp);
-      // console.log(e, "submit here");
-      console.log(this.allFormExp);
-      console.log(this.experience);
-      // if (this.infoUser.fullName && this.infoUser.birthday) {
       this.$emit("handleNextStep");
-      // }
     },
     onAddNewForm() {
       this.allFormExp = [
@@ -127,8 +145,31 @@ export default {
         { ...this.exp, id: (Math.random() * 100).toFixed(3) },
       ];
     },
+    onRemoveForm(id) {
+      if (this.allFormExp.length > 1) {
+        this.allFormExp = this.allFormExp.filter((item) => item.id !== id);
+      }
+    },
   },
 };
 </script>
 
-<style></style>
+<style scoped>
+.form-company {
+  padding-bottom: 25px;
+}
+.company {
+  padding: 10px 16px;
+  background: #f8f8f8;
+}
+.company label {
+  display: flex;
+  column-gap: 16px;
+}
+.company label .icon-remove {
+  width: 32px;
+  height: 32px;
+}
+.add-form {
+}
+</style>

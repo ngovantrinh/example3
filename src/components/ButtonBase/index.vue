@@ -1,11 +1,20 @@
 <template>
-  <Button :class="className" :type="typeButton" @click="handleFunction">{{
-    nameButton
-  }}</Button>
+  <Button
+    :class="className"
+    :type="typeButton"
+    @click="handleFunction"
+    :disabled="buttonStatus"
+    >{{ nameButton }}
+  </Button>
 </template>
 <script>
 export default {
   name: "ButtonBase",
+  // data() {
+  //   return {
+  //     test: false,
+  //   };
+  // },
   props: {
     typeButton: {
       type: String,
@@ -16,9 +25,13 @@ export default {
     className: {
       type: String,
     },
+    buttonStatus: {
+      type: Boolean,
+    },
   },
   methods: {
     handleFunction(e) {
+      // console.log(this.buttonStatus);
       this.$emit("onHandle", e);
     },
   },
