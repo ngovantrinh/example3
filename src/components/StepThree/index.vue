@@ -131,6 +131,7 @@ export default {
     usCompany: {
       handler() {
         this.changeStatusBtn();
+        this.showAll = false;
       },
       deep: true,
     },
