@@ -5,6 +5,7 @@ import Form from './modules/Form'
 // Create a new store instance.
 Vue.use(Vuex)
 export const store = new Vuex.Store({
+  
   modules:{
     Form
   }

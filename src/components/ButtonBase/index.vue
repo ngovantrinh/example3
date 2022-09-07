@@ -10,11 +10,6 @@
 <script>
 export default {
   name: "ButtonBase",
-  // data() {
-  //   return {
-  //     test: false,
-  //   };
-  // },
   props: {
     typeButton: {
       type: String,

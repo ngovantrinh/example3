@@ -1,5 +1,5 @@
 const state = {
-    infomationUser: null,
+      infomationUser: null,
       experience: [],
       confirm: null,
 }

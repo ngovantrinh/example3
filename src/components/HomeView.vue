@@ -30,30 +30,13 @@
         <p>Xác nhận thông tin</p>
       </div>
     </div>
-    <component
-      :is="currentStep"
-      @handleNextStep="onNextStep"
-      @handlePrevStep="onPrevStep"
-    />
-    <!-- <div class="button-box">
-      <button
-        v-if="currentStep !== 'StepThree'"
-        class="next-btn"
-        @click="onNextStep"
-      >
-        Tiếp tục
-      </button>
-      <button v-else-if="currentStep === 'StepThree'" class="next-btn">
-        Hoàn thành
-      </button>
-      <button
-        v-if="currentStep != 'StepOne'"
-        class="next-btn"
-        @click="onPrevStep"
-      >
-        Quay lại
-      </button>
-    </div> -->
+    <keep-alive>
+      <component
+        :is="currentStep"
+        @handleNextStep="onNextStep"
+        @handlePrevStep="onPrevStep"
+      />
+    </keep-alive>
   </div>
 </template>
 
@@ -75,6 +58,7 @@ export default {
         infomation: null,
       },
       currentStep: DEFAULT_STEP,
+      asdsd: "heheh",
     };
   },
   components: {
@@ -154,6 +138,9 @@ export default {
 .button-box {
   display: flex;
   column-gap: 25px;
+}
+.wrapper {
+  width: 926px;
 }
 .wrapper .next-btn {
   padding: 8px 12px;

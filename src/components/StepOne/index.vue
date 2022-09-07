@@ -36,8 +36,7 @@
           <div class="title">
             <p>Thành phố</p>
           </div>
-          <select v-model="infoUser.contry" class="input-line" name="" id="">
-            <!-- <option disabled > dd</option> -->
+          <select v-model="infoUser.contry" class="input-line">
             <option value="hanoi">Thành Phố Hà Nội</option>
             <option value="Thành phố Hồ Chí Minh">Thành phố Hồ Chí Minh</option>
             <option value="Bắc Ninh">Bắc Ninh</option>
@@ -70,7 +69,7 @@
               rows="5"
               maxlength="1000"
             ></textarea>
-            <p>0/1000</p>
+            <p>{{ infoUser.describeYourself.length }}/1000</p>
           </label>
         </div>
         <div @drop.prevent="handleDrop" class="upload-box">
@@ -105,7 +104,7 @@ import DefaultLayout from "../DefaultLayout/index.vue";
 import { onMounted, onUnmounted } from "vue";
 import useStorage from "@/utils/useStorage";
 import ButtonBase from "../ButtonBase/index.vue";
-import { mapGetters, mapMutations } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 // eslint-disable-next-line
 const { uploadFile } = useStorage("files");
 // improt DefaultLayout from '';
@@ -126,7 +125,7 @@ export default {
         birthday: null,
         contry: null,
         position: null,
-        describeYourself: null,
+        describeYourself: "",
         images: null,
       },
     };
@@ -138,7 +137,7 @@ export default {
   },
 
   methods: {
-    ...mapMutations(["setInfoUser"]),
+    ...mapActions(["updateInfoUser"]),
     condition(selected) {
       const typesFile = ["image/png", "image/jpg"];
       const ERRORS = {
@@ -174,14 +173,17 @@ export default {
       this.condition(item);
     },
     onSubmitInfo() {
-      this.setInfoUser(this.infoUser);
       if (this.infoUser.fullName && this.infoUser.birthday) {
-        this.$emit("handleNextStep", this.infoUser);
+        this.updateInfoUser(this.infoUser);
+        console.log(this.infomationUser.fullName);
+        this.$emit("handleNextStep");
       }
     },
     changeStatusBtn() {
       if (this.infoUser.fullName !== null && this.infoUser.birthday !== null) {
         this.status = false;
+      } else {
+        this.status = true;
       }
     },
   },
@@ -200,11 +202,11 @@ export default {
     });
   },
   watch: {
-    "infoUser.fullName": function () {
-      this.changeStatusBtn();
-    },
-    "infoUser.birthday": function () {
-      this.changeStatusBtn();
+    infoUser: {
+      handler() {
+        this.changeStatusBtn();
+      },
+      deep: true,
     },
   },
 };

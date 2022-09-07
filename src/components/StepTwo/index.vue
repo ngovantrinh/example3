@@ -5,20 +5,12 @@
         <div class="form-information">
           <div class="line-info company">
             <label for="company">
-              <!-- <input
-                v-model="form.nameCompany"
-                class="input-line"
-                id="company"
-                type="text"
-                placeholder="Tên công ty"
-              /> -->
               <select
                 v-model="form.nameCompany"
                 class="input-line"
                 name=""
                 id=""
               >
-                <!-- <option disabled > dd</option> -->
                 <option value="Mor software">Mor software</option>
                 <option value="MH Solutions">MH Solutions</option>
                 <option value="Tech">Tech</option>
@@ -38,7 +30,6 @@
                 <span class="required">Must</span>
                 <span>Vị trí từng làm</span>
               </div>
-              <!-- <p>Vị trí từng làm</p> -->
               <input
                 v-model="form.position"
                 class="input-line"
@@ -54,13 +45,13 @@
                 <span class="required">Must</span>
                 <span>Thời gian làm việc</span>
               </div>
-              <input
+              <date-picker
                 v-model="form.interval"
-                class="input-line"
-                type="date"
-                id="position"
-                required
-              />
+                range
+                placeholder="Thời gian làm việc"
+                value-type="DD/MM/YYYY"
+                format="DD-MM-YYYY"
+              ></date-picker>
             </label>
           </div>
           <div class="line-info">
@@ -74,6 +65,7 @@
                 rows="5"
               ></textarea>
             </label>
+            {{ form.describeWork.length }} / 1000
           </div>
         </div>
       </DefaultLayout>
@@ -90,6 +82,7 @@
         :nameButton="'Tiếp tục'"
         :type="'submit'"
         @onHandle="onSubmitInfo"
+        :buttonStatus="status"
       />
       <ButtonBase
         :className="'next-btn'"
@@ -102,6 +95,7 @@
 </template>
 
 <script>
+import DatePicker from "vue2-datepicker";
 import DefaultLayout from "../DefaultLayout/index.vue";
 import ButtonBase from "../ButtonBase/index.vue";
 import { mapActions, mapGetters, mapMutations } from "vuex";
@@ -110,8 +104,8 @@ export default {
   name: "StepTwo",
   data() {
     return {
+      status: true,
       exp: {
-        id: 1,
         nameCompany: "",
         position: "",
         interval: "",
@@ -119,24 +113,27 @@ export default {
       },
       allFormExp: [],
       image: RemoveIcon,
+      time1: null,
+      time2: null,
+      time3: null,
     };
   },
-  components: { DefaultLayout, ButtonBase },
+  components: { DefaultLayout, ButtonBase, DatePicker },
   created() {
-    this.allFormExp.push(this.exp);
+    this.allFormExp.push({ ...this.exp, id: (Math.random() * 100).toFixed(3) });
   },
   computed: {
-    ...mapGetters(["experience"]),
+    ...mapGetters(["experience", "infomationUser"]),
   },
   methods: {
     ...mapMutations(["setExp"]),
-    ...mapActions(["updateInfoUser"]),
+    ...mapActions(["updateExperience"]),
     onPrevInfo(e) {
       e.preventDefault();
       this.$emit("handlePrevStep");
     },
     onSubmitInfo() {
-      this.updateInfoUser(this.allFormExp);
+      this.updateExperience(this.allFormExp);
       this.$emit("handleNextStep");
     },
     onAddNewForm() {
@@ -149,6 +146,26 @@ export default {
       if (this.allFormExp.length > 1) {
         this.allFormExp = this.allFormExp.filter((item) => item.id !== id);
       }
+    },
+    changeStatusBtn() {
+      for (let i = 0; i < this.allFormExp.length; i++) {
+        if (
+          this.allFormExp[i].position.length > 0 &&
+          this.allFormExp[i].interval.length > 0
+        ) {
+          this.status = false;
+        } else {
+          this.status = true;
+        }
+      }
+    },
+  },
+  watch: {
+    allFormExp: {
+      handler() {
+        this.changeStatusBtn();
+      },
+      deep: true,
     },
   },
 };
