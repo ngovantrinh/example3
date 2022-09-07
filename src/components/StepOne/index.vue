@@ -72,7 +72,11 @@
             <p>{{ infoUser.describeYourself.length }}/1000</p>
           </label>
         </div>
-        <div @drop.prevent="handleDrop" class="upload-box">
+        <div
+          @drop.prevent="handleDrop"
+          class="upload-box"
+          :class="{ 'warning-dropzone': warningStatus }"
+        >
           <div class="title">
             <h3>Hãy kéo và thả ảnh vào đây hoặc</h3>
           </div>
@@ -86,6 +90,7 @@
             />
           </label>
         </div>
+        <p v-if="warningStatus" class="error-file">{{ errorFile }}</p>
       </div>
     </DefaultLayout>
     <ButtonBase
@@ -128,6 +133,7 @@ export default {
         describeYourself: "",
         images: null,
       },
+      errorFile: "",
     };
   },
 
@@ -139,7 +145,7 @@ export default {
   methods: {
     ...mapActions(["updateInfoUser"]),
     condition(selected) {
-      const typesFile = ["image/png", "image/jpg"];
+      const typesFile = ["image/png", "image/jpg", "image/jpeg"];
       const ERRORS = {
         TOO_LARGE: "Please select files less than 10MP in size.",
         LIMIT_FILES: "Exceed the limit of 10 file",
@@ -153,7 +159,8 @@ export default {
             // console.log(this.errorFile);
             this.warningStatus = true;
           } else {
-            this.listFiles.push(selected);
+            console.log(selected);
+            this.infoUser.images = selected;
             this.warningStatus = false;
           }
         } else {
@@ -166,6 +173,7 @@ export default {
     handleChangeFile(e) {
       const selected = e.target.files[0];
       this.condition(selected);
+      // console.log(this.infoUser.images);
       // uploadFile(selected);
     },
     handleDrop(e) {
@@ -175,7 +183,6 @@ export default {
     onSubmitInfo() {
       if (this.infoUser.fullName && this.infoUser.birthday) {
         this.updateInfoUser(this.infoUser);
-        console.log(this.infomationUser.fullName);
         this.$emit("handleNextStep");
       }
     },
@@ -267,5 +274,12 @@ export default {
   border: none;
   margin: 25px 0px;
   cursor: pointer;
+}
+.form-information .warning-dropzone {
+  border-color: #ed5d5d;
+}
+.form-information .error-file {
+  color: #ed5d5d;
+  padding-top: 10px;
 }
 </style>

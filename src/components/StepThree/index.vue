@@ -61,7 +61,7 @@
         <p>{{ infomationUser.contry }}</p>
         <p>{{ infomationUser.position }}</p>
         <p>{{ infomationUser.describeYourself }}</p>
-        <p>{{ infomationUser.images }}</p>
+        <p>{{ infomationUser.images.name }}</p>
       </div>
       <div v-for="exp in experience" :key="exp.id">
         <h2>id: {{ exp.id }}</h2>
@@ -112,6 +112,7 @@ export default {
   methods: {
     onComplete() {
       this.updateConfirm(this.usCompany);
+      console.log(this.infomationUser.fullName);
       this.showAll = true;
     },
     onPrevInfo(e) {
