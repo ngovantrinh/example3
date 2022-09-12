@@ -1,14 +1,15 @@
 <template>
   <div>
-    <h1>hhe</h1>
+    <label for=""> </label>
+    <slot></slot>
   </div>
 </template>
 
 <script>
 export default {
-  name: "VueTest",
+  name: "LayoutInput",
 };
 </script>
 
-<style lang="">
+<style scoped>
 </style>

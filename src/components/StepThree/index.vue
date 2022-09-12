@@ -4,36 +4,19 @@
       <DefaultLayout>
         <div class="form-information">
           <div class="line-info">
-            <label for="description">
-              <div class="title">
-                <span class="required">Must</span>
-                <span>Lý do muốn vào công ty</span>
-              </div>
-              <textarea
-                v-model="usCompany.reason"
-                class="input-line"
-                id="description"
-                cols="30"
-                rows="5"
-                required
-              ></textarea>
-            </label>
+            <InputTextarea
+              :title="'Lý do muốn vào công ty'"
+              :must="true"
+              @input="handleReason"
+            />
           </div>
           <div class="line-info">
-            <label for="company">
-              <div class="title">
-                <span class="required">Must</span>
-                <span>Mức lương mong muốn</span>
-              </div>
-              <input
-                v-model="usCompany.wage"
-                class="input-line wage"
-                id="company"
-                type="text"
-                required
-              />
-              VNĐ
-            </label>
+            <InputText
+              :title="'Mức lương mong luốn'"
+              :must="true"
+              :wage="true"
+              @input="handleWage"
+            />
           </div>
         </div>
       </DefaultLayout>
@@ -61,7 +44,7 @@
         <p>{{ infomationUser.contry }}</p>
         <p>{{ infomationUser.position }}</p>
         <p>{{ infomationUser.describeYourself }}</p>
-        <p>{{ infomationUser.images.name }}</p>
+        <!-- <p>{{ infomationUser.images }}</p> -->
       </div>
       <div v-for="exp in experience" :key="exp.id">
         <h2>id: {{ exp.id }}</h2>
@@ -90,6 +73,8 @@
 import DefaultLayout from "../DefaultLayout/index.vue";
 import ButtonBase from "../ButtonBase/index.vue";
 import { mapActions, mapGetters } from "vuex";
+import InputTextarea from "../Input/InputTextarea.vue";
+import InputText from "../Input/InputText.vue";
 
 // export const BUTTON_NAME = "Quay lại";
 
@@ -108,7 +93,7 @@ export default {
   computed: {
     ...mapGetters(["infomationUser", "experience", "confirm"]),
   },
-  components: { DefaultLayout, ButtonBase },
+  components: { DefaultLayout, ButtonBase, InputTextarea, InputText },
   methods: {
     onComplete() {
       this.updateConfirm(this.usCompany);
@@ -120,11 +105,17 @@ export default {
       this.$emit("handlePrevStep");
     },
     changeStatusBtn() {
-      if (this.usCompany.reason.length > 0 && this.usCompany.wage.length > 0) {
+      if (this.usCompany.reason.length && this.usCompany.wage.length) {
         this.status = false;
       } else {
         this.status = true;
       }
+    },
+    handleReason(value) {
+      this.usCompany.reason = value;
+    },
+    handleWage(value) {
+      this.usCompany.wage = value;
     },
     ...mapActions(["updateConfirm"]),
   },
@@ -140,8 +131,8 @@ export default {
 };
 </script>
 
-<style scoped>
-.wage {
+<style>
+.line-info .wage {
   min-width: 80px;
   max-width: 120px;
 }

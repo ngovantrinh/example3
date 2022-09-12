@@ -58,7 +58,6 @@ export default {
         infomation: null,
       },
       currentStep: DEFAULT_STEP,
-      asdsd: "heheh",
     };
   },
   components: {

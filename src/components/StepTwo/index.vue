@@ -3,69 +3,29 @@
     <div class="form-company" v-for="form in allFormExp" :key="form.id">
       <DefaultLayout>
         <div class="form-information">
-          <div class="line-info company">
-            <label for="company">
-              <select
-                v-model="form.nameCompany"
-                class="input-line"
-                name=""
-                id=""
-              >
-                <option value="Mor software">Mor software</option>
-                <option value="MH Solutions">MH Solutions</option>
-                <option value="Tech">Tech</option>
-              </select>
-              <img
-                class="icon-remove"
-                :src="image"
-                alt=""
-                srcset=""
-                @click="onRemoveForm(form.id)"
-              />
-            </label>
+          <div class="line-info">
+            <BaseSelect
+              :contryOption="company"
+              :removeForm="true"
+              @onRemoveForm="onRemoveForm(form.id)"
+            />
           </div>
           <div class="line-info">
-            <label for="company">
-              <div class="title">
-                <span class="required">Must</span>
-                <span>Vị trí từng làm</span>
-              </div>
-              <input
-                v-model="form.position"
-                class="input-line"
-                id="company"
-                type="text"
-                required
-              />
-            </label>
+            <InputText
+              @input="handlePosition($event, form)"
+              :title="'Vị trí từng làm'"
+              :must="true"
+            />
           </div>
+          <DatePickers
+            :title="'Thời gian làm việc'"
+            @datePicker="handleTime($event, form)"
+          />
           <div class="line-info">
-            <label for="position">
-              <div class="title">
-                <span class="required">Must</span>
-                <span>Thời gian làm việc</span>
-              </div>
-              <date-picker
-                v-model="form.interval"
-                range
-                placeholder="Thời gian làm việc"
-                value-type="DD/MM/YYYY"
-                format="DD-MM-YYYY"
-              ></date-picker>
-            </label>
-          </div>
-          <div class="line-info">
-            <label for="description">
-              <p>Mô tả về công việc</p>
-              <textarea
-                v-model="form.describeWork"
-                class="input-line"
-                id="description"
-                cols="30"
-                rows="5"
-              ></textarea>
-            </label>
-            {{ form.describeWork.length }} / 1000
+            <InputTextarea
+              :title="'Mô tả về công việc'"
+              @input="handleDescribe($event, form)"
+            />
           </div>
         </div>
       </DefaultLayout>
@@ -95,16 +55,21 @@
 </template>
 
 <script>
-import DatePicker from "vue2-datepicker";
 import DefaultLayout from "../DefaultLayout/index.vue";
 import ButtonBase from "../ButtonBase/index.vue";
 import { mapActions, mapGetters, mapMutations } from "vuex";
 import RemoveIcon from "../../assets/images/Trash.png";
+import DatePickers from "../DatePicker/DatePickers.vue";
+import InputTextarea from "../Input/InputTextarea.vue";
+import InputText from "../Input/InputText.vue";
+import { company } from "@/constants/constant";
+import BaseSelect from "../Selected/BaseSelect.vue";
 export default {
   name: "StepTwo",
   data() {
     return {
       status: true,
+      company: company,
       exp: {
         nameCompany: "",
         position: "",
@@ -118,7 +83,14 @@ export default {
       time3: null,
     };
   },
-  components: { DefaultLayout, ButtonBase, DatePicker },
+  components: {
+    DefaultLayout,
+    ButtonBase,
+    DatePickers,
+    InputTextarea,
+    InputText,
+    BaseSelect,
+  },
   created() {
     this.allFormExp.push({ ...this.exp, id: (Math.random() * 100).toFixed(3) });
   },
@@ -148,16 +120,23 @@ export default {
       }
     },
     changeStatusBtn() {
-      for (let i = 0; i < this.allFormExp.length; i++) {
-        if (
-          this.allFormExp[i].position.length > 0 &&
-          this.allFormExp[i].interval.length > 0
-        ) {
+      this.allFormExp.forEach((item) => {
+        if (item.position.length && item.interval.length) {
           this.status = false;
         } else {
           this.status = true;
         }
-      }
+      });
+    },
+    handleTime(value, form) {
+      form.interval = value;
+      console.log(value, form);
+    },
+    handleDescribe(value, form) {
+      form.describeWork = value;
+    },
+    handlePosition(value, form) {
+      form.position = value;
     },
   },
   watch: {
@@ -179,14 +158,13 @@ export default {
   padding: 10px 16px;
   background: #f8f8f8;
 }
-.company label {
+.company {
   display: flex;
   column-gap: 16px;
+  cursor: pointer;
 }
-.company label .icon-remove {
+.company .icon-remove {
   width: 32px;
   height: 32px;
-}
-.add-form {
 }
 </style>

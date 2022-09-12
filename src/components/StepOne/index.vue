@@ -3,20 +3,7 @@
     <DefaultLayout>
       <div class="form-information">
         <div class="line-info">
-          <label for="company">
-            <div class="title">
-              <span class="required">Must</span>
-              <span>Họ và tên</span>
-            </div>
-            <input
-              v-model="infoUser.fullName"
-              class="input-line"
-              id="company"
-              type="text"
-              maxlength="100"
-              required
-            />
-          </label>
+          <InputText @input="testFunc" :title="'Họ và tên'" :must="true" />
         </div>
         <div class="line-info">
           <label for="position">
@@ -33,44 +20,17 @@
           </label>
         </div>
         <div class="line-info">
-          <div class="title">
-            <p>Thành phố</p>
-          </div>
-          <select v-model="infoUser.contry" class="input-line">
-            <option value="hanoi">Thành Phố Hà Nội</option>
-            <option value="Thành phố Hồ Chí Minh">Thành phố Hồ Chí Minh</option>
-            <option value="Bắc Ninh">Bắc Ninh</option>
-          </select>
+          <BaseSelect
+            @select="handleOption"
+            :title="'Thành phố'"
+            :contryOption="contryOption"
+          />
         </div>
         <div class="line-info">
-          <label for="time">
-            <div class="title">
-              <p>Vị trí làm việc</p>
-            </div>
-            <input
-              v-model="infoUser.position"
-              class="input-line"
-              type="text"
-              id="time"
-              placeholder="Vị trí làm việc"
-            />
-          </label>
+          <InputText @input="handlePosition" :title="'Vị trí làm việc'" />
         </div>
         <div class="line-info">
-          <label for="description">
-            <div class="title">
-              <p>Mô tả về bản thân</p>
-            </div>
-            <textarea
-              v-model="infoUser.describeYourself"
-              class="input-line"
-              id="description"
-              cols="30"
-              rows="5"
-              maxlength="1000"
-            ></textarea>
-            <p>{{ infoUser.describeYourself.length }}/1000</p>
-          </label>
+          <InputTextarea @input="handleDescribe" :title="'Mô tả về bản thân'" />
         </div>
         <div
           @drop.prevent="handleDrop"
@@ -101,6 +61,7 @@
       @onHandle="onSubmitInfo"
     />
     <!-- <h1>{{ infomationUser }}</h1> -->
+    <!-- <InputText @input="testFunc" /> -->
   </form>
 </template>
 
@@ -110,6 +71,10 @@ import { onMounted, onUnmounted } from "vue";
 import useStorage from "@/utils/useStorage";
 import ButtonBase from "../ButtonBase/index.vue";
 import { mapActions, mapGetters } from "vuex";
+import InputText from "../Input/InputText.vue";
+import InputTextarea from "../Input/InputTextarea.vue";
+import BaseSelect from "../Selected/BaseSelect.vue";
+import { contry } from "@/constants/constant";
 // eslint-disable-next-line
 const { uploadFile } = useStorage("files");
 // improt DefaultLayout from '';
@@ -118,13 +83,18 @@ export default {
   components: {
     DefaultLayout,
     ButtonBase,
+    InputText,
+    InputTextarea,
+    BaseSelect,
   },
   data() {
     return {
       status: true,
       listFiles: [],
+      test: null,
       numberOfFiles: 0,
       warningStatus: false,
+      contryOption: contry,
       infoUser: {
         fullName: null,
         birthday: null,
@@ -187,11 +157,23 @@ export default {
       }
     },
     changeStatusBtn() {
-      if (this.infoUser.fullName !== null && this.infoUser.birthday !== null) {
+      if (this.infoUser.fullName && this.infoUser.birthday) {
         this.status = false;
       } else {
         this.status = true;
       }
+    },
+    testFunc(value) {
+      this.infoUser.fullName = value;
+    },
+    handlePosition(value) {
+      this.infoUser.position = value;
+    },
+    handleDescribe(value) {
+      this.infoUser.describeYourself = value;
+    },
+    handleOption(value) {
+      this.infoUser.contry = value;
     },
   },
 
