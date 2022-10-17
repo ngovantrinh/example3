@@ -44,7 +44,6 @@
         <p>{{ infomationUser.contry }}</p>
         <p>{{ infomationUser.position }}</p>
         <p>{{ infomationUser.describeYourself }}</p>
-        <!-- <p>{{ infomationUser.images }}</p> -->
       </div>
       <div v-for="exp in experience" :key="exp.id">
         <h2>id: {{ exp.id }}</h2>
@@ -62,7 +61,7 @@
               style: "currency",
               currency: "VND",
             }).format(confirm.wage)
-          }}
+          }}ddd
         </p>
       </div>
     </div>
@@ -75,8 +74,6 @@ import ButtonBase from "../ButtonBase/index.vue";
 import { mapActions, mapGetters } from "vuex";
 import InputTextarea from "../Input/InputTextarea.vue";
 import InputText from "../Input/InputText.vue";
-
-// export const BUTTON_NAME = "Quay lại";
 
 export default {
   name: "StepThree",

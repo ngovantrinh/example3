@@ -60,8 +60,6 @@
       :buttonStatus="status"
       @onHandle="onSubmitInfo"
     />
-    <!-- <h1>{{ infomationUser }}</h1> -->
-    <!-- <InputText @input="testFunc" /> -->
   </form>
 </template>
 
